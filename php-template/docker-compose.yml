@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - 80:80
+    volumes:
+      - ./contents:/var/www/html
+  db:
+    build:
+      context: ./db
+    environment:
+      - "MYSQL_DATABASE=sample"
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+      - "13306:3306"
+    restart: always
+    volumes:
+      - ./db/data:/var/lib/mysql
