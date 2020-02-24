@@ -7,9 +7,10 @@ services:
       - 80:80
     volumes:
       - ./contents:/var/www/html
+    links:
+      - db
   db:
-    build:
-      context: ./db
+    image: mysql:5.7
     environment:
       - "MYSQL_DATABASE=sample"
       - "MYSQL_ROOT_PASSWORD=root"
@@ -18,3 +19,15 @@ services:
     restart: always
     volumes:
       - ./db/data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    links:
+      - app
+    ports:
+      - 4040:80
